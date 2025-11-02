@@ -2,10 +2,15 @@ import Image from 'next/image';
 
 import slider from '../../public/featured.png';
 import ProductList from '@/components/ProductList';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'TAMNGUYEN - Best clothes',
+    description: 'TAMNGUYEN is the best place to find the best clothes',
+};
 
 const Homepage = async ({ searchParams }: { searchParams: Promise<{ category: string }> }) => {
     const category = (await searchParams).category;
-    console.log({ category });
     return (
         <div className="">
             <div className="relative aspect-3/1 mb-12">
