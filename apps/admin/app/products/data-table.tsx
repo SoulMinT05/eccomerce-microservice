@@ -59,15 +59,15 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         <div className="">
             <div className="flex items-center py-4">
                 <Input
-                    placeholder="Filter emails..."
-                    value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-                    onChange={(event) => table.getColumn('email')?.setFilterValue(event.target.value)}
+                    placeholder="Filter names..."
+                    value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+                    onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
                     className="max-w-sm"
                 />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto">
-                            Columns Visiblity
+                            Columns Visibility
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -96,7 +96,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                     <div className="flex justify-end">
                         <Button variant="destructive" className="m-4 cursor-pointer">
                             <Trash2 className="w-4 h-4" />
-                            Delete Payment(s)
+                            Delete Product(s)
                         </Button>
                     </div>
                 )}

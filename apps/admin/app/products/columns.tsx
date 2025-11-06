@@ -15,17 +15,20 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
+import Image from 'next/image';
 
-export type Payment = {
-    id: string;
-    amount: number;
-    userId: string;
-    fullname: string;
-    email: string;
-    status: 'pending' | 'processing' | 'success' | 'failed';
+export type Product = {
+    id: number;
+    price: string | number;
+    name: string;
+    shortDescription: string;
+    description: string;
+    sizes: string[];
+    colors: string[];
+    images: Record<string, string>;
 };
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Product>[] = [
     {
         id: 'select',
         header: ({ table }) => (
@@ -44,75 +47,65 @@ export const columns: ColumnDef<Payment>[] = [
         ),
     },
     {
-        accessorKey: 'userId',
+        accessorKey: 'id',
         header: ({ column }) => {
             return (
                 <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    User ID
+                    ID
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             );
         },
     },
     {
-        accessorKey: 'fullname',
-        header: ({ column }) => {
-            return (
-                <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    Full name
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            );
-        },
-    },
-    {
-        accessorKey: 'email',
-        header: ({ column }) => {
-            return (
-                <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    Email
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            );
-        },
-    },
-    {
-        accessorKey: 'status',
-        header: 'Status',
+        accessorKey: 'Image',
+        header: 'Image',
         cell: ({ row }) => {
-            const status = row.getValue('status');
+            const product = row.original;
 
             return (
-                <div
-                    className={cn(
-                        `p-1 rounded-md w-max text-xs`,
-                        status === 'pending' && 'bg-yellow-500/40',
-                        status === 'success' && 'bg-green-500/40',
-                        status === 'failed' && 'bg-red-500/40'
-                    )}
-                >
-                    {status as string}
+                <div className="w-9 h-9 relative">
+                    <Image
+                        src={Object.values(product.images)[0]}
+                        // src={product.images[product.colors[0]]}
+                        alt={product.name}
+                        fill
+                        className="rounded-full object-cover"
+                    />
                 </div>
             );
         },
     },
     {
-        accessorKey: 'amount',
-        header: () => <div className="text-right">Amount</div>,
-        cell: ({ row }) => {
-            const amount = parseFloat(row.getValue('amount'));
-            const formatted = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-            }).format(amount);
-
-            return <div className="text-right font-medium">{formatted}</div>;
+        accessorKey: 'name',
+        header: ({ column }) => {
+            return (
+                <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+                    Name
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
         },
+    },
+    {
+        accessorKey: 'price',
+        header: ({ column }) => {
+            return (
+                <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+                    Price
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
+    },
+    {
+        accessorKey: 'shortDescription',
+        header: 'Description',
     },
     {
         id: 'actions',
         cell: ({ row }) => {
-            const payment = row.original;
+            const product = row.original;
 
             return (
                 <DropdownMenu>
@@ -124,14 +117,19 @@ export const columns: ColumnDef<Payment>[] = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
-                            Copy payment ID
+                        <DropdownMenuItem
+                            onClick={() =>
+                                navigator.clipboard.writeText(
+                                    typeof product.id === 'string' ? product.id : product.id.toString()
+                                )
+                            }
+                        >
+                            Copy product ID
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
-                            <Link href={`/users/${payment.userId}`}>View customer</Link>
+                            <Link href={`/products/${product.id}`}>View customer</Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem>View payment details</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );

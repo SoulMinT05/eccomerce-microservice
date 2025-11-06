@@ -104,6 +104,21 @@ const SingleUserPage = () => {
                             </HoverCard>
                         </div>
                     </div>
+                    {/*  USER CARD container */}
+                    <div className="bg-primary-foreground p-4 rounded-lg space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Avatar className="size-12">
+                                <AvatarImage src="https://github.com/shadcn.png" />
+                                <AvatarFallback>TN</AvatarFallback>
+                            </Avatar>
+                            <h1 className="text-xl font-semibold">Tam Nguyen</h1>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam aspernatur cum et
+                            dolor. Et tempora repellat deserunt voluptatum molestiae quam incidunt! Et quaerat quia
+                            illo?
+                        </p>
+                    </div>
                     {/*  Information container */}
                     <div className="bg-primary-foreground p-4 rounded-lg">
                         <div className="flex items-center justify-between">
@@ -123,8 +138,8 @@ const SingleUserPage = () => {
                                 <Progress value={33} />
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className="font-bold">Username:</span>
-                                <span>tam.soul05</span>
+                                <span className="font-bold">Full name:</span>
+                                <span>Tam Nguyen</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="font-bold">Email:</span>
@@ -135,39 +150,21 @@ const SingleUserPage = () => {
                                 <span>+84 234 92091</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className="font-bold">Location:</span>
-                                <span>Ho Chi Minh, Viet Nam</span>
+                                <span className="font-bold">Address:</span>
+                                <span>125 Tran Main</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className="font-bold">Role:</span>
-                                <Badge>Admin</Badge>
+                                <span className="font-bold">City:</span>
+                                <span>Ho Chi Minh, Viet Nam</span>
                             </div>
                         </div>
                         <p className="text-sm text-muted-foreground mt-4">Joined on 2025.05.05</p>
                     </div>
                     {/* Card list container */}
-                    <div className="bg-primary-foreground p-4 rounded-lg">
-                        <CardList title="Recent Transactions" />
-                    </div>
                 </div>
 
                 {/* Right */}
                 <div className="w-full xl:w-2/3 space-y-6">
-                    {/*  USER CARD container */}
-                    <div className="bg-primary-foreground p-4 rounded-lg space-y-2">
-                        <div className="flex items-center gap-2">
-                            <Avatar className="size-12">
-                                <AvatarImage src="https://github.com/shadcn.png" />
-                                <AvatarFallback>TN</AvatarFallback>
-                            </Avatar>
-                            <h1 className="text-xl font-semibold">Tam Nguyen</h1>
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam aspernatur cum et
-                            dolor. Et tempora repellat deserunt voluptatum molestiae quam incidunt! Et quaerat quia
-                            illo?
-                        </p>
-                    </div>
                     {/*  CHART container */}
                     <div className="bg-primary-foreground p-4 rounded-lg">
                         <h1 className="text-xl font-semibold mb-4">User Activity</h1>

@@ -20,23 +20,15 @@ const formSchema = z.object({
     role: z.enum(['admin', 'staff', 'user']),
 });
 
-const EditUser = () => {
+const AddUser = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            fullname: 'Tam Nguyen',
-            email: 'tam.soul05@gmail.com',
-            phone: '+84 234 92091',
-            address: '125 Tran Main',
-            city: 'Ho Chi Minh, Viet Nam',
-            role: 'admin',
-        },
     });
 
     return (
         <SheetContent>
             <SheetHeader>
-                <SheetTitle className="mb-4">Edit User</SheetTitle>
+                <SheetTitle className="mb-4">Add User</SheetTitle>
                 <SheetDescription asChild>
                     <Form {...form}>
                         <form className="space-y-8">
@@ -149,4 +141,4 @@ const EditUser = () => {
     );
 };
 
-export default EditUser;
+export default AddUser;

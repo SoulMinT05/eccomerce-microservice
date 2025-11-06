@@ -23,7 +23,7 @@ export default function Home() {
                 <AppAreaChart />
             </div>
             <div className="bg-primary-foreground p-4 rounded-lg">
-                <CardList title="Popular Content" />
+                <CardList title="Popular Products" />
             </div>
         </div>
     );

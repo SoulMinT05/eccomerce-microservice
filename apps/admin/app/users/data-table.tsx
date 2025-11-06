@@ -67,7 +67,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto">
-                            Columns Visiblity
+                            Columns Visibility
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -96,7 +96,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                     <div className="flex justify-end">
                         <Button variant="destructive" className="m-4 cursor-pointer">
                             <Trash2 className="w-4 h-4" />
-                            Delete Payment(s)
+                            Delete User(s)
                         </Button>
                     </div>
                 )}
