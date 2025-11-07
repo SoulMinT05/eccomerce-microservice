@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
 import SearchBar from './SearchBar';
 import { Bell, Home } from 'lucide-react';
 import logo from '../../public/logo.png';
 import ShoppingCartIcon from './ShoppingCartIcon';
+import ProfileButton from './ProfileButton';
 
 const Header = () => {
     return (
@@ -23,7 +24,13 @@ const Header = () => {
                 </Link>
                 <Bell className="w-4 h-4 text-gray-600" />
                 <ShoppingCartIcon />
-                <Link href="/login">Sign in</Link>
+                <SignedOut>
+                    <SignInButton />
+                </SignedOut>
+                <SignedIn>
+                    {/* <UserButton /> */}
+                    <ProfileButton />
+                </SignedIn>
             </div>
         </header>
     );
