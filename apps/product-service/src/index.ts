@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import { clerkMiddleware, getAuth } from '@clerk/express';
-import { shouldBeUser } from '../middlewares/authMiddleware.js';
+import { shouldBeUser } from './middlewares/authMiddleware.js';
 
 import router from './routes';
 

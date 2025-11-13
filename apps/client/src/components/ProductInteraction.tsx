@@ -1,6 +1,6 @@
 'use client';
 import useCartStore from '@/app/stores/cardStore';
-import { ProductType } from '@/types';
+import { ProductType } from '@repo/types';
 import { Minus, Plus, ShoppingCart } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';

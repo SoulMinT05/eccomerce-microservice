@@ -1,6 +1,8 @@
 import Fastify from 'fastify';
 import { clerkClient, clerkPlugin, getAuth } from '@clerk/fastify';
-import { shouldBeUser } from '../middlewares/index.js';
+import { shouldBeUser } from './middlewares/authMiddleware.js';
+import { connectOrderDB } from '@repo/order-db';
+import { orderRoute } from './routes/order.route.js';
 
 const PORT = 8001;
 const fastify = Fastify();
@@ -31,12 +33,15 @@ fastify.get('/test', { preHandler: shouldBeUser }, async (request, reply) => {
     });
 });
 
+fastify.register(orderRoute);
+
 const start = async () => {
     try {
+        await connectOrderDB();
         await fastify.listen({ port: PORT });
         console.log(`Order service is running on port ${PORT}`);
     } catch (err) {
-        fastify.log.error(err);
+        console.log(err);
         process.exit(1);
     }
 };
