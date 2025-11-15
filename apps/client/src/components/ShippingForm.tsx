@@ -34,6 +34,7 @@ const ShippingForm = ({ setShippingForm }: { setShippingForm: (data: ShippingFor
                     id="name"
                     placeholder="John Back..."
                     {...register('name')}
+                    value="John Back"
                 />
                 {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
             </div>
@@ -47,6 +48,7 @@ const ShippingForm = ({ setShippingForm }: { setShippingForm: (data: ShippingFor
                     id="email"
                     placeholder="yourmail@gmail.com"
                     {...register('email')}
+                    value="johnback@gmail.com"
                 />
                 {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
             </div>
@@ -58,8 +60,9 @@ const ShippingForm = ({ setShippingForm }: { setShippingForm: (data: ShippingFor
                     className="border-b border-gray-200 py-2 outline-none text-sm"
                     type="phone"
                     id="phone"
-                    placeholder="09128212310"
+                    placeholder="0912821210"
                     {...register('phone')}
+                    value="0912821210"
                 />
                 {errors.phone && <p className="text-xs text-red-500">{errors.phone.message}</p>}
             </div>
@@ -73,6 +76,7 @@ const ShippingForm = ({ setShippingForm }: { setShippingForm: (data: ShippingFor
                     id="address"
                     placeholder="124 Tran Hoa Binh, District 7"
                     {...register('address')}
+                    value="124 Tran Hoa Binh, District 7"
                 />
                 {errors.address && <p className="text-xs text-red-500">{errors.address.message}</p>}
             </div>
@@ -86,6 +90,7 @@ const ShippingForm = ({ setShippingForm }: { setShippingForm: (data: ShippingFor
                     id="city"
                     placeholder="Ho Chi Minh City"
                     {...register('city')}
+                    value="Ho Chi Minh City"
                 />
                 {errors.city && <p className="text-xs text-red-500">{errors.city.message}</p>}
             </div>

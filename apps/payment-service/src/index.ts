@@ -1,11 +1,13 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
-import { clerkMiddleware, getAuth } from '@hono/clerk-auth';
-import { shouldBeUser } from './middlewares/authMiddleware.js';
-import stripe from './utils/stripe.js';
+import { clerkMiddleware } from '@hono/clerk-auth';
+import sessionRoute from './routes/session.route.js';
+import { cors } from 'hono/cors';
+import webhookRoute from './routes/webhook.route.js';
 
 const app = new Hono();
 app.use('*', clerkMiddleware());
+app.use('*', cors({ origin: ['http://localhost:3002'] }));
 
 app.get('/health', (c) => {
     return c.json({
@@ -15,26 +17,29 @@ app.get('/health', (c) => {
     });
 });
 
-app.post('/create-stripe-product', shouldBeUser, async (c) => {
-    const res = await stripe.products.create({
-        id: '123',
-        name: 'Test Product',
-        default_price_data: {
-            currency: 'usd',
-            unit_amount: 10 * 100,
-        },
-    });
+app.route('/sessions', sessionRoute);
+app.route('/webhooks', webhookRoute);
 
-    return c.json(res);
-});
+// app.post('/create-stripe-product', shouldBeUser, async (c) => {
+//     const res = await stripe.products.create({
+//         id: '123',
+//         name: 'Test Product',
+//         default_price_data: {
+//             currency: 'usd',
+//             unit_amount: 10 * 100,
+//         },
+//     });
 
-app.get('/stripe-product-price', shouldBeUser, async (c) => {
-    const res = await stripe.prices.list({
-        product: '123',
-    });
+//     return c.json(res);
+// });
 
-    return c.json(res);
-});
+// app.get('/stripe-product-price', shouldBeUser, async (c) => {
+//     const res = await stripe.prices.list({
+//         product: '123',
+//     });
+
+//     return c.json(res);
+// });
 
 const start = async () => {
     try {
