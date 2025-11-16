@@ -4,6 +4,7 @@ import { clerkMiddleware, getAuth } from '@clerk/express';
 import { shouldBeUser } from './middlewares/authMiddleware.js';
 
 import router from './routes';
+import { consumer, producer } from './utils/kafka.js';
 
 const PORT = 8000;
 const app = express();
@@ -41,6 +42,16 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`Product service is running on port ${PORT}`);
-});
+const start = async () => {
+    try {
+        Promise.all([(await producer).connect(), (await consumer).connect()]);
+        app.listen(PORT, () => {
+            console.log(`Product service is running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
+};
+
+start();

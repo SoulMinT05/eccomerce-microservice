@@ -48,8 +48,6 @@ sessionRoute.get('/:session_id', async (c) => {
         expand: ['line_items'],
     });
 
-    console.log({ session });
-
     return c.json({
         status: session.status,
         paymentStatus: session.payment_status,
