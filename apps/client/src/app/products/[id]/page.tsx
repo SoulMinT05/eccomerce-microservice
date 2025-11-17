@@ -3,28 +3,34 @@ import { ProductType } from '@repo/types';
 import Image from 'next/image';
 import React from 'react';
 
-const product: ProductType = {
-    id: 1,
-    name: 'Adidas CoreFit T-Shirt',
-    shortDescription: 'Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.',
-    description:
-        'Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit. Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit. Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.',
-    price: 39.9,
-    sizes: ['s', 'm', 'l', 'xl', 'xxl'],
-    colors: ['gray', 'purple', 'green'],
-    images: {
-        gray: '/products/1g.png',
-        purple: '/products/1p.png',
-        green: '/products/1gr.png',
-    },
-    categorySlug: 'test',
-    createdAt: new Date(),
-    updatedAt: new Date(),
+// const product: ProductType = {
+//     id: 1,
+//     name: 'Adidas CoreFit T-Shirt',
+//     shortDescription: 'Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.',
+//     description:
+//         'Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit. Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit. Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.',
+//     price: 39.9,
+//     sizes: ['s', 'm', 'l', 'xl', 'xxl'],
+//     colors: ['gray', 'purple', 'green'],
+//     images: {
+//         gray: '/products/1g.png',
+//         purple: '/products/1p.png',
+//         green: '/products/1gr.png',
+//     },
+//     categorySlug: 'test',
+//     createdAt: new Date(),
+//     updatedAt: new Date(),
+// };
+
+const fetchProduct = async (productId: string) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_PRODUCT_SERVICE_URL}/products/${productId}`);
+    const data: ProductType = await res.json();
+    return data;
 };
 
-export const generateMetadata = async ({ params }: { params: string }) => {
-    // TODO: Get the product from db
-    // TEMPORARY
+export const generateMetadata = async ({ params }: { params: Promise<{ id: string }> }) => {
+    const { id } = await params;
+    const product = await fetchProduct(id);
     return {
         title: product.name,
         description: product.description,
@@ -35,13 +41,16 @@ const ProductDetailPage = async ({
     params,
     searchParams,
 }: {
-    params: Promise<{ id: number | string }>;
+    params: Promise<{ id: string }>;
     searchParams: Promise<{ size: string; color: string }>;
 }) => {
+    const { id } = await params;
     const { size, color } = await searchParams;
 
-    const selectedSize = size || (product.sizes[0] as string);
-    const selectedColor = color || (product.colors[0] as string);
+    const product = await fetchProduct(id);
+
+    const selectedSize = size || (product?.sizes[0] as string);
+    const selectedColor = color || (product?.colors[0] as string);
 
     return (
         <div className="flex flex-col gap-4 lg:flex-row md:gap-12 mt-12">

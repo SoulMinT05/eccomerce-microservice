@@ -90,20 +90,33 @@ export const getProducts = async (req: Request, res: Response) => {
         }
     })();
 
+    const where: any = {};
+    if (category && category !== 'all') {
+        where.category = { slug: category as string };
+    }
+
+    if (search) {
+        where.name = {
+            contains: search as string,
+            mode: 'insensitive',
+        };
+    }
+
     const products = await prisma.product.findMany({
-        where: {
-            category: {
-                slug: category as string,
-            },
-            name: {
-                contains: search as string,
-                mode: 'insensitive',
-            },
-        },
+        // where: {
+        //     category: {
+        //         slug: category as string,
+        //     },
+        //     name: {
+        //         contains: search as string,
+        //         mode: 'insensitive',
+        //     },
+        // },
+        where,
         orderBy,
         take: limit ? Number(limit) : undefined,
     });
-    return res.status(200).json({ products });
+    return res.status(200).json(products);
 };
 export const getDetailProduct = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -112,7 +125,5 @@ export const getDetailProduct = async (req: Request, res: Response) => {
         where: { id: Number(id) },
     });
 
-    return res.status(200).json({
-        product,
-    });
+    return res.status(200).json(product);
 };
