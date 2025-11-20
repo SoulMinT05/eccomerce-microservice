@@ -24,6 +24,11 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Trash2 } from 'lucide-react';
+import { useAuth } from '@clerk/nextjs';
+import { useMutation } from '@tanstack/react-query';
+import { User } from '@clerk/nextjs/server';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -52,6 +57,35 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             columnFilters,
             columnVisibility,
             rowSelection,
+        },
+    });
+
+    const { getToken } = useAuth();
+    const router = useRouter();
+
+    const mutation = useMutation({
+        mutationFn: async () => {
+            const token = await getToken();
+            const selectedRows = table.getSelectedRowModel().rows;
+
+            Promise.all(
+                selectedRows.map(async (row) => {
+                    const userId = (row.original as User).id;
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/users/${userId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                })
+            );
+        },
+        onSuccess: () => {
+            toast.success('Deleted user(s) successfully');
+            router.refresh();
+        },
+        onError: (error) => {
+            toast.error(error.message);
         },
     });
 
@@ -94,9 +128,14 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             <div className="overflow-hidden rounded-md border">
                 {Object.keys(rowSelection).length > 0 && (
                     <div className="flex justify-end">
-                        <Button variant="destructive" className="m-4 cursor-pointer">
+                        <Button
+                            onClick={() => mutation.mutate()}
+                            disabled={mutation.isPending}
+                            variant="destructive"
+                            className="m-4 cursor-pointer"
+                        >
                             <Trash2 className="w-4 h-4" />
-                            Delete User(s)
+                            {mutation.isPending ? 'Deleting..' : 'Delete User(s)'}
                         </Button>
                     </div>
                 )}

@@ -18,8 +18,30 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 import EditUser from '@/components/EditUser';
 import AppLineChart from '@/components/AppLineChart';
+import { auth, User } from '@clerk/nextjs/server';
 
-const SingleUserPage = () => {
+const getData = async (id: string): Promise<User | null> => {
+    const { getToken } = await auth();
+    const token = await getToken();
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/users/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+};
+
+const SingleUserPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+    const { id } = await params;
+    const data = await getData(id);
+
+    if (!data) return <div className="">User not found</div>;
     return (
         <div>
             <Breadcrumb>
@@ -33,7 +55,9 @@ const SingleUserPage = () => {
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbPage>Tam Nguyen</BreadcrumbPage>
+                        <BreadcrumbPage>
+                            {data?.firstName + ' ' + data?.lastName || data?.username || '-'}
+                        </BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
@@ -108,10 +132,14 @@ const SingleUserPage = () => {
                     <div className="bg-primary-foreground p-4 rounded-lg space-y-2">
                         <div className="flex items-center gap-2">
                             <Avatar className="size-12">
-                                <AvatarImage src="https://github.com/shadcn.png" />
-                                <AvatarFallback>TN</AvatarFallback>
+                                <AvatarImage src={data?.imageUrl} />
+                                <AvatarFallback>
+                                    {data?.firstName?.charAt(0) || data?.username?.charAt(0) || '-'}
+                                </AvatarFallback>
                             </Avatar>
-                            <h1 className="text-xl font-semibold">Tam Nguyen</h1>
+                            <h1 className="text-xl font-semibold">
+                                {data?.firstName + ' ' + data?.lastName || data?.username || '-'}
+                            </h1>
                         </div>
                         <p className="text-sm text-muted-foreground">
                             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam aspernatur cum et
@@ -139,26 +167,28 @@ const SingleUserPage = () => {
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="font-bold">Full name:</span>
-                                <span>Tam Nguyen</span>
+                                <span>{data?.firstName + ' ' + data?.lastName || data?.username || '-'}</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="font-bold">Email:</span>
-                                <span>tam.soul05@gmail.com</span>
+                                <span>{data.emailAddresses[0]?.emailAddress || '-'}</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="font-bold">Phone:</span>
-                                <span>+84 234 92091</span>
+                                <span>{data.phoneNumbers[0]?.phoneNumber || '-'}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className="font-bold">Address:</span>
-                                <span>125 Tran Main</span>
+                                <span className="font-bold">Role:</span>
+                                <span>{String(data.publicMetadata?.role) || 'user'}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className="font-bold">City:</span>
-                                <span>Ho Chi Minh, Viet Nam</span>
+                                <span className="font-bold">Status:</span>
+                                <span>{data.banned ? 'Banned' : 'Active'}</span>
                             </div>
                         </div>
-                        <p className="text-sm text-muted-foreground mt-4">Joined on 2025.05.05</p>
+                        <p className="text-sm text-muted-foreground mt-4">
+                            Joined on {new Date(data.createdAt).toLocaleDateString('vi')}
+                        </p>
                     </div>
                     {/* Card list container */}
                 </div>
